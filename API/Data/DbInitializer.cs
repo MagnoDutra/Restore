@@ -5,7 +5,7 @@ namespace API.Data;
 
 public class DbInitializer
 {
-  public void InitDb(WebApplication app)
+  public static void InitDb(WebApplication app)
   {
     // Cria o scopo e depois desfaz dele
     using var scope = app.Services.CreateScope();
@@ -16,7 +16,7 @@ public class DbInitializer
     SeedData(context);
   }
 
-  private void SeedData(StoreContext context)
+  private static void SeedData(StoreContext context)
   {
     context.Database.Migrate(); // Vai checar se ja existe uma db e vai criar se n existir.
 
