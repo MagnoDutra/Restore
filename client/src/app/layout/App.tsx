@@ -1,10 +1,28 @@
 import { useEffect, useState } from "react";
 import { Product } from "../models/product";
 import Catalog from "../../features/catalog/Catalog";
-import { Box, Button, Container, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  createTheme,
+  CssBaseline,
+  ThemeProvider,
+} from "@mui/material";
+import NavBar from "./NavBar";
 
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
+  const darkMode = true;
+  const palleteType = darkMode ? "dark" : "light";
+
+  const theme = createTheme({
+    palette: {
+      mode: palleteType,
+      background: {
+        default: palleteType === "light" ? "#eaeaea" : "#121212",
+      },
+    },
+  });
 
   useEffect(() => {
     fetch("https://localhost:5000/api/products")
@@ -12,32 +30,21 @@ function App() {
       .then((data) => setProducts(data));
   }, []);
 
-  const addProduct = () => {
-    setProducts((prevState) => [
-      ...prevState,
-      {
-        id: prevState.length + 1,
-        quantityInStock: 10,
-        description: "teste",
-        name: "product" + (prevState.length + 1),
-        price: 100.0 + prevState.length * 100,
-        pictureUrl: "https://picsum.photo/200",
-        type: "teste",
-        brand: "teste,",
-      },
-    ]);
-  };
-
   return (
-    <Container maxWidth="xl">
-      <Box display="flex" justifyContent="center" gap={3} marginY={3}>
-        <Typography variant="h4">ReStore</Typography>
-        <Button variant="contained" onClick={addProduct}>
-          Add Product
-        </Button>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <NavBar />
+      <Box
+        sx={{
+          minHeight: "100vh",
+          background: darkMode ? "#121212" : "#eaeaea",
+        }}
+      >
+        <Container maxWidth="xl" sx={{ mt: 14 }}>
+          <Catalog products={products}></Catalog>
+        </Container>
       </Box>
-      <Catalog products={products}></Catalog>
-    </Container>
+    </ThemeProvider>
   );
 }
 
