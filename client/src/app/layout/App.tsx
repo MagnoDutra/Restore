@@ -12,7 +12,7 @@ import NavBar from "./NavBar";
 
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
-  const darkMode = true;
+  const [darkMode, setDarkMode] = useState(false);
   const palleteType = darkMode ? "dark" : "light";
 
   const theme = createTheme({
@@ -30,17 +30,24 @@ function App() {
       .then((data) => setProducts(data));
   }, []);
 
+  const toggleTheme = () => {
+    setDarkMode((darkMode) => !darkMode);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <NavBar />
+      <NavBar darkMode={darkMode} toggleTheme={toggleTheme} />
       <Box
         sx={{
           minHeight: "100vh",
-          background: darkMode ? "#121212" : "#eaeaea",
+          background: darkMode
+            ? "radial-gradient(circle, #1e3aBa, #111b27)"
+            : "radial-gradient(circle, #baecf9, #f0f9ff)",
+          py: 6,
         }}
       >
-        <Container maxWidth="xl" sx={{ mt: 14 }}>
+        <Container maxWidth="xl" sx={{ mt: 8 }}>
           <Catalog products={products}></Catalog>
         </Container>
       </Box>
